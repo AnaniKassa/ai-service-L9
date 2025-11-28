@@ -29,6 +29,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker Image
+        working-directory: ./ai-service-L9 #added change here
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_IMAGE_NAME: ${{ vars.DOCKER_IMAGE_NAME }}
@@ -36,6 +37,7 @@ jobs:
           docker build -t $DOCKER_USERNAME/$DOCKER_IMAGE_NAME:test .
 
       - name: Push Docker Image
+        working-directory: ./ai-service-L9 #added change here
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_IMAGE_NAME: ${{ vars.DOCKER_IMAGE_NAME }}
