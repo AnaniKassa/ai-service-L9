@@ -35,23 +35,17 @@ jobs:
           echo "List files:"
           ls -R
 
-      - name: Build Docker Image
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/${{ vars.DOCKER_IMAGE_NAME }}:test
+          load: true
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_IMAGE_NAME: ${{ vars.DOCKER_IMAGE_NAME }}
-        run: |
-          echo "Building Docker image from current directory:"
-          pwd
-          ls -al
-          # Force classic docker build with explicit context '.'
-          docker build --progress=plain -f Dockerfile -t $DOCKER_USERNAME/$DOCKER_IMAGE_NAME:test .
-
-      - name: Push Docker Image
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_IMAGE_NAME: ${{ vars.DOCKER_IMAGE_NAME }}
-        run: |
-          docker push $DOCKER_USERNAME/$DOCKER_IMAGE_NAME:test
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
   # Step 2: Test Job (Integration Tests)
   # Run automated tests against the containerized application to ensure it behaves as expected.
