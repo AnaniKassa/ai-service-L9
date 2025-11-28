@@ -94,7 +94,7 @@ jobs:
     needs: Release
 
     steps:
-      - name: Deploy to AKS
+      - name: Deploy to AKS cluster
         env:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
