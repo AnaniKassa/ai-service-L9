@@ -28,9 +28,6 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Disable Docker Buildx (force normal docker build)
-        run: docker buildx rm default || true
-      
       - name: Debug — Show directory structure
         run: |
           echo "PWD:"
@@ -43,7 +40,11 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_IMAGE_NAME: ${{ vars.DOCKER_IMAGE_NAME }}
         run: |
-          docker build -f ./Dockerfile -t $DOCKER_USERNAME/$DOCKER_IMAGE_NAME:test .
+          echo "Building Docker image from current directory:"
+          pwd
+          ls -al
+          # Force classic docker build with explicit context '.'
+          docker build --progress=plain -f Dockerfile -t $DOCKER_USERNAME/$DOCKER_IMAGE_NAME:test .
 
       - name: Push Docker Image
         env:
